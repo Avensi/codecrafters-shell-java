@@ -16,7 +16,7 @@ public class Main {
                 System.out.println(command.substring(5));
             } else if(command.startsWith("type")){
                 String argument = command.substring(5);
-                String output = builtIn.contains(argument) ? command + " is a shell builtin" : command + ": not found";
+                String output = builtIn.contains(argument) ? argument + " is a shell builtin" : argument + ": not found";
                 System.out.println(output);
             }
             else {
