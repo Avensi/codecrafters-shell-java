@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -6,6 +7,9 @@ public class Main {
             System.out.print("$ ");
             Scanner scanner = new Scanner(System.in);
             String command = scanner.nextLine();
+            if(command.equals("exit")){
+                break;
+            }
             System.out.println(command + ": command not found");
         }
     }
