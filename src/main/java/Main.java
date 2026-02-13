@@ -5,22 +5,21 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         List<String> builtIn = List.of("echo", "exit", "type");
+        Command commandService = new Command();
 
         while (true){
             System.out.print("$ ");
-            String command = scanner.nextLine();
+            String input = scanner.nextLine();
 
-            if(command.equals("exit")){
+            if(input.equals("exit")){
                 System.exit(0);
-            } else if(command.startsWith("echo")){
-                System.out.println(command.substring(5));
-            } else if(command.startsWith("type")){
-                String argument = command.substring(5);
-                String output = builtIn.contains(argument) ? argument + " is a shell builtin" : argument + ": not found";
-                System.out.println(output);
+            } else if(input.startsWith("echo")){
+                commandService.echo(input);
+            } else if(input.startsWith("type")){
+                commandService.type(input, builtIn);
             }
             else {
-                System.out.println(command + ": command not found");
+                System.out.println(input + ": command not found");
             }
         }
     }
