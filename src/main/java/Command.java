@@ -21,7 +21,7 @@ public class Command {
             for (String directory: directories){
                 Path filePath = Paths.get(directory, argument);
                 if (Files.exists(filePath) && Files.isExecutable(filePath)) {
-                    output = argument + "is " + filePath;
+                    output = argument + " is " + filePath;
                 }
             }
         }
