@@ -17,13 +17,12 @@ public class Command {
         else {
             String pathEnv = System.getenv("PATH");
             String[] directories = pathEnv.split(":");
-            StringBuilder pathToTry = new StringBuilder();
+
             for (String directory: directories){
-                pathToTry.append(directory);
-            }
-            Path filePath = Paths.get(pathToTry.toString(), argument);
-            if (Files.exists(filePath) && Files.isExecutable(filePath)) {
-                output = argument + "is " + filePath;
+                Path filePath = Paths.get(directory, argument);
+                if (Files.exists(filePath) && Files.isExecutable(filePath)) {
+                    output = argument + "is " + filePath;
+                }
             }
         }
         System.out.println(output);
