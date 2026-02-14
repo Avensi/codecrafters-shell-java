@@ -61,7 +61,7 @@ public class Command {
         }
 
         if (Files.exists(targetPath)){
-            currentDir = targetPath;
+            currentDir = targetPath.normalize();
         } else {
             System.out.println("cd: " + targetDir + ": No such file or directory");
         }
