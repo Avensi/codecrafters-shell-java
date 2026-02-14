@@ -8,12 +8,12 @@ public class Command {
     private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd", "cd");
     private Path currentDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
 
-    public void echo(String input) {
-        System.out.println(input.substring(5));
+    public void echo(List<String> tokens) {
+        System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
     }
 
-    public void type(String input){
-        String argument = input.substring(5);
+    public void type(List<String> tokens){
+        String argument = tokens.get(1);
         String output = argument + ": not found";
         if (BUILTINS.contains(argument)){
             output = argument + " is a shell builtin";
@@ -33,16 +33,15 @@ public class Command {
         System.out.println(output);
     }
 
-    public void execute(String input){
-        String[] commandArgs = input.split("\\s+");
+    public void execute(List<String> tokens){
         try {
-            ProcessBuilder pb = new ProcessBuilder(commandArgs);
+            ProcessBuilder pb = new ProcessBuilder(tokens);
             pb.directory(currentDir.toFile());
             pb.inheritIO();
             Process process = pb.start();
             process.waitFor();
         } catch (IOException e) {
-            System.out.println(commandArgs[0] + ": command not found");
+            System.out.println(tokens.get(1) + ": command not found");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -52,15 +51,16 @@ public class Command {
         System.out.println(this.currentDir);
     }
 
-    public void cd(String input){
-        String[] commandArgs = input.split("\\s+");
-        String targetDir = commandArgs[1];
+    public void cd(List<String> tokens){
+        if (tokens.size() < 2) return;
+
+        String targetDir = tokens.get(1);
 
         if (targetDir.startsWith("~")){
             targetDir = targetDir.replaceFirst("^~", System.getenv("HOME"));
         }
 
-        Path targetPath = currentDir.resolve(Paths.get(targetDir));;
+        Path targetPath = currentDir.resolve(Paths.get(targetDir));
 
         if (Files.exists(targetPath) && Files.isDirectory(targetPath)){
             currentDir = targetPath.normalize();
