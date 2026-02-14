@@ -54,6 +54,11 @@ public class Command {
     public void cd(String input){
         String[] commandArgs = input.split("\\s+");
         String targetDir = commandArgs[1];
+
+        if (targetDir.equals("~")){
+            targetDir = System.getenv("HOME");
+        }
+
         Path targetPath = currentDir.resolve(Paths.get(targetDir));;
 
         if (Files.exists(targetPath)){
