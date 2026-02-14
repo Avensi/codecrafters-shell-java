@@ -1,10 +1,8 @@
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        List<String> builtIn = List.of("echo", "exit", "type");
         Command commandService = new Command();
 
         while (true){
@@ -20,7 +18,8 @@ public class Main {
             switch (commandName) {
                 case "exit" -> System.exit(0);
                 case "echo" -> commandService.echo(input);
-                case "type" -> commandService.type(input, builtIn);
+                case "type" -> commandService.type(input);
+                case "pwd" -> commandService.pwd();
                 default -> commandService.execute(input);
             }
         }

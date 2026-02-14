@@ -5,15 +5,16 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Command {
+    private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd");
 
     public void echo(String input) {
         System.out.println(input.substring(5));
     }
 
-    public void type(String input, List<String> builtIn){
+    public void type(String input){
         String argument = input.substring(5);
         String output = argument + ": not found";
-        if (builtIn.contains(argument)){
+        if (BUILTINS.contains(argument)){
             output = argument + " is a shell builtin";
         }
         else {
@@ -43,5 +44,10 @@ public class Command {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public void pwd(){
+        String currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize().toString();
+        System.out.println(System.getProperty("user.dir"));
     }
 }
