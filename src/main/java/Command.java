@@ -37,6 +37,7 @@ public class Command {
         String[] commandArgs = input.split("\\s+");
         try {
             ProcessBuilder pb = new ProcessBuilder(commandArgs);
+            pb.directory(currentDir.toFile());
             pb.inheritIO();
             Process process = pb.start();
             process.waitFor();
@@ -55,13 +56,13 @@ public class Command {
         String[] commandArgs = input.split("\\s+");
         String targetDir = commandArgs[1];
 
-        if (targetDir.equals("~")){
-            targetDir = System.getenv("HOME");
+        if (targetDir.startsWith("~")){
+            targetDir = targetDir.replaceFirst("^~", System.getenv("HOME"));
         }
 
         Path targetPath = currentDir.resolve(Paths.get(targetDir));;
 
-        if (Files.exists(targetPath)){
+        if (Files.exists(targetPath) && Files.isDirectory(targetPath)){
             currentDir = targetPath.normalize();
         } else {
             System.out.println("cd: " + targetDir + ": No such file or directory");
