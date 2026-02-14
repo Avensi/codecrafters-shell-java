@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Command {
-    private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd");
+    private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd", "cd");
 
     public void echo(String input) {
         System.out.println(input.substring(5));
@@ -47,7 +47,16 @@ public class Command {
     }
 
     public void pwd(){
-        String currentDirectory = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize().toString();
         System.out.println(System.getProperty("user.dir"));
+    }
+
+    public void cd(String input){
+        String[] commandArgs = input.split("\\s+");
+        Path path = Paths.get(commandArgs[1]);
+        if (Files.exists(path)){
+            System.setProperty("user.dir", path.toString());
+        } else {
+            System.out.println("cd: " + input + ": No such file or directory");
+        }
     }
 }

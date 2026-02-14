@@ -20,6 +20,7 @@ public class Main {
                 case "echo" -> commandService.echo(input);
                 case "type" -> commandService.type(input);
                 case "pwd" -> commandService.pwd();
+                case "cd" -> commandService.cd(input);
                 default -> commandService.execute(input);
             }
         }
