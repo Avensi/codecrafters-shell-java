@@ -54,11 +54,7 @@ public class Command {
     public void cd(String input){
         String[] commandArgs = input.split("\\s+");
         String targetDir = commandArgs[1];
-        Path targetPath = Paths.get(targetDir);
-
-        if(!targetPath.isAbsolute()){
-            targetPath = currentDir.resolve(targetDir);
-        }
+        Path targetPath = currentDir.resolve(Paths.get(targetDir));;
 
         if (Files.exists(targetPath)){
             currentDir = targetPath.normalize();
