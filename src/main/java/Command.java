@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Command {
     private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd", "cd");
+    private Path currentDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
 
     public void echo(String input) {
         System.out.println(input.substring(5));
@@ -47,16 +48,18 @@ public class Command {
     }
 
     public void pwd(){
-        System.out.println(System.getProperty("user.dir"));
+        System.out.println(this.currentDir);
     }
 
     public void cd(String input){
         String[] commandArgs = input.split("\\s+");
-        Path path = Paths.get(commandArgs[1]);
-        if (Files.exists(path)){
-            System.setProperty("user.dir", path.toString());
+        String targetDir = commandArgs[1];
+        Path targetPath = currentDir.resolve(targetDir);
+
+        if (Files.exists(Paths.get(targetDir))){
+            currentDir = targetPath;
         } else {
-            System.out.println("cd: " + path + ": No such file or directory");
+            System.out.println("cd: " + targetDir + ": No such file or directory");
         }
     }
 }
