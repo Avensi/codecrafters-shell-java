@@ -9,17 +9,19 @@ public class Main {
 
         while (true){
             System.out.print("$ ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
+            String[] tokens = input.split("\\s+");
+            String commandName = tokens[0];
 
-            if(input.equals("exit")){
-                System.exit(0);
-            } else if(input.startsWith("echo")){
-                commandService.echo(input);
-            } else if(input.startsWith("type")){
-                commandService.type(input, builtIn);
+            if (input.isEmpty()) {
+                continue;
             }
-            else {
-                commandService.execute(input);
+
+            switch (commandName) {
+                case "exit" -> System.exit(0);
+                case "echo" -> commandService.echo(input);
+                case "type" -> commandService.type(input, builtIn);
+                default -> commandService.execute(input);
             }
         }
     }

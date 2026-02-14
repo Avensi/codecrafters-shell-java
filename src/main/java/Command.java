@@ -32,7 +32,7 @@ public class Command {
     }
 
     public void execute(String input){
-        String[] commandArgs = input.split(" ");
+        String[] commandArgs = input.split("\\s+");
         try {
             ProcessBuilder pb = new ProcessBuilder(commandArgs);
             pb.inheritIO();
@@ -43,6 +43,5 @@ public class Command {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
     }
 }
