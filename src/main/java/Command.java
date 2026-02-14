@@ -32,7 +32,7 @@ public class Command {
     }
 
     public void execute(String input){
-        String[] commandArgs = input.substring(5).split(" ");
+        String[] commandArgs = input.split(" ");
         try {
             ProcessBuilder pb = new ProcessBuilder(commandArgs);
             pb.inheritIO();
