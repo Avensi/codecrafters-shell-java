@@ -16,7 +16,7 @@ public class CommandParser {
 
         for(int i=0; i<input.length(); i++){
             char currentChar = input.charAt(i);
-            if (currentChar == ESCAPE && !inDoubleQuote && !inSingleQuote){
+            if (currentChar == ESCAPE && !inSingleQuote){
                 if (i + 1 < input.length()) {
                     char nextChar = input.charAt(i + 1);
                     currentWord.append(nextChar);
