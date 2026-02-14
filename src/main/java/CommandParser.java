@@ -20,6 +20,9 @@ public class CommandParser {
                 if (i + 1 < input.length()) {
                     char nextChar = input.charAt(i + 1);
                     currentWord.append(nextChar);
+                    i++;
+                } else {
+                    currentWord.append(currentChar);
                 }
             } else {
                 if (currentChar == SINGLE_QUOTE && !inDoubleQuote){
