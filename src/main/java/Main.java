@@ -19,7 +19,7 @@ public class Main {
                 commandService.type(input, builtIn);
             }
             else {
-                System.out.println(input + ": command not found");
+                commandService.execute(input);
             }
         }
     }
