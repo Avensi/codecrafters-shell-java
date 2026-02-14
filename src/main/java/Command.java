@@ -13,7 +13,8 @@ public class Command {
     }
 
     public void type(List<String> tokens){
-        String argument = tokens.get(1);
+        String argument = tokens.getFirst();
+        if (tokens.size() < 2) return;
         String output = argument + ": not found";
         if (BUILTINS.contains(argument)){
             output = argument + " is a shell builtin";
