@@ -41,7 +41,7 @@ public class Command {
             Process process = pb.start();
             process.waitFor();
         } catch (IOException e) {
-            System.out.println(tokens.get(1) + ": command not found");
+            System.out.println(tokens.getFirst() + ": command not found");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
