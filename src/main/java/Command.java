@@ -56,7 +56,7 @@ public class Command {
         if (Files.exists(path)){
             System.setProperty("user.dir", path.toString());
         } else {
-            System.out.println("cd: " + input + ": No such file or directory");
+            System.out.println("cd: " + path + ": No such file or directory");
         }
     }
 }
