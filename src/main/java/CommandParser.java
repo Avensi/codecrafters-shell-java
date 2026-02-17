@@ -1,5 +1,9 @@
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandParser {
 
@@ -9,7 +13,9 @@ public class CommandParser {
     private static final char ESCAPE = '\\';
     private static final char DOLLAR = '$';
     private static final char NEWLINE = '\n';
-    public List<String> parseCommand(String input){
+    private static final char REDIRECT_OPERATOR = '>';
+
+    public List<String> parseCommand(String input) throws FileNotFoundException {
         List<String> result = new ArrayList<>();
         boolean inSingleQuote = false;
         boolean inDoubleQuote = false;
@@ -56,6 +62,20 @@ public class CommandParser {
         }
         if(!currentWord.isEmpty()){
             result.add(currentWord.toString());
+        }
+        return parseOperator(result);
+    }
+
+    public List<String> parseOperator(List<String> tokens) throws FileNotFoundException {
+        List<String> result = new ArrayList<>();
+        for (String token: tokens){
+            if (Objects.equals(token, String.valueOf(REDIRECT_OPERATOR))){
+                String fileName = tokens.getLast();
+                FileOutputStream outputFile = new FileOutputStream(fileName);
+                System.setOut(new PrintStream(outputFile));
+                break;
+            }
+            result.add(token);
         }
         return result;
     }

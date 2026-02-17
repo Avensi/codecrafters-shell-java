@@ -1,3 +1,6 @@
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,6 +28,8 @@ public class Main {
                 case "cd" -> commandService.cd(tokens);
                 default -> commandService.execute(tokens);
             }
+            System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+
         }
     }
 

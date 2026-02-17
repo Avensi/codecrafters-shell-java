@@ -18,6 +18,7 @@ public class Command {
         String output = argument + ": not found";
         if (BUILTINS.contains(argument)){
             output = argument + " is a shell builtin";
+            System.out.println(output);
         }
         else {
             String pathEnv = System.getenv("PATH");
@@ -27,11 +28,14 @@ public class Command {
                 Path filePath = Paths.get(directory, argument);
                 if (Files.exists(filePath) && Files.isExecutable(filePath)) {
                     output = argument + " is " + filePath;
-                    break;
+                    System.out.println(output);
+                }
+                else {
+                    System.err.println(output);
                 }
             }
         }
-        System.out.println(output);
+
     }
 
     public void execute(List<String> tokens){
@@ -42,7 +46,7 @@ public class Command {
             Process process = pb.start();
             process.waitFor();
         } catch (IOException e) {
-            System.out.println(tokens.getFirst() + ": command not found");
+            System.err.println(tokens.getFirst() + ": command not found");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -66,7 +70,7 @@ public class Command {
         if (Files.exists(targetPath) && Files.isDirectory(targetPath)){
             currentDir = targetPath.normalize();
         } else {
-            System.out.println("cd: " + targetDir + ": No such file or directory");
+            System.err.println("cd: " + targetDir + ": No such file or directory");
         }
     }
 }
