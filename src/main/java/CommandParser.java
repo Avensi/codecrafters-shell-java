@@ -13,7 +13,7 @@ public class CommandParser {
     private static final char ESCAPE = '\\';
     private static final char DOLLAR = '$';
     private static final char NEWLINE = '\n';
-    private static final char REDIRECT_OPERATOR = '>';
+    private static final List<String> REDIRECT_OPERATORS = List.of(">", "1>");
 
     public List<String> parseCommand(String input) throws FileNotFoundException {
         List<String> result = new ArrayList<>();
@@ -69,8 +69,9 @@ public class CommandParser {
     public List<String> parseOperator(List<String> tokens) throws FileNotFoundException {
         List<String> result = new ArrayList<>();
         for (String token: tokens){
-            if (Objects.equals(token, String.valueOf(REDIRECT_OPERATOR))){
+            if (REDIRECT_OPERATORS.contains(token)){
                 String fileName = tokens.getLast();
+                System.out.println(fileName);
                 FileOutputStream outputFile = new FileOutputStream(fileName);
                 System.setOut(new PrintStream(outputFile));
                 break;
