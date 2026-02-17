@@ -1,9 +1,5 @@
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CommandParser {
 
@@ -15,7 +11,7 @@ public class CommandParser {
     private static final char NEWLINE = '\n';
     private static final List<String> REDIRECT_OPERATORS = List.of(">", "1>");
 
-    public List<String> parseCommand(String input) throws FileNotFoundException {
+    public List<String> parseCommand(String input){
         List<String> result = new ArrayList<>();
         boolean inSingleQuote = false;
         boolean inDoubleQuote = false;
@@ -63,22 +59,16 @@ public class CommandParser {
         if(!currentWord.isEmpty()){
             result.add(currentWord.toString());
         }
-        return parseOperator(result);
+        return result;
     }
 
-    public List<String> parseOperator(List<String> tokens) throws FileNotFoundException {
-        List<String> result = new ArrayList<>();
+    public boolean hasOperator(List<String> tokens){
         for (String token: tokens){
             if (REDIRECT_OPERATORS.contains(token)){
-                String fileName = tokens.getLast();
-                System.out.println(fileName);
-                FileOutputStream outputFile = new FileOutputStream(fileName);
-                System.setOut(new PrintStream(outputFile));
-                break;
+               return true;
             }
-            result.add(token);
         }
-        return result;
+        return false;
     }
 
     private boolean isValidDoubleQuoteEscape(char nextChar) {

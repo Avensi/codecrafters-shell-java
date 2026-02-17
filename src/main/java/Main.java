@@ -9,6 +9,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Command commandService = new Command();
         CommandParser commandParser = new CommandParser();
+        PrintStream originalOut = System.out;
+        String fileName = null;
 
         while (true){
             System.out.print("$ ");
@@ -20,15 +22,21 @@ public class Main {
             List<String> tokens = commandParser.parseCommand(input);
             String commandName = tokens.getFirst();
 
+            if (commandParser.hasOperator(tokens)){
+                fileName = tokens.getLast();
+                FileOutputStream outputFile = new FileOutputStream(fileName);
+                System.setOut(new PrintStream(outputFile));
+            }
+
             switch (commandName) {
                 case "exit" -> System.exit(0);
                 case "echo" -> commandService.echo(tokens);
                 case "type" -> commandService.type(tokens);
                 case "pwd" -> commandService.pwd();
                 case "cd" -> commandService.cd(tokens);
-                default -> commandService.execute(tokens);
+                default -> commandService.execute(tokens, fileName);
             }
-            System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+            System.setOut(originalOut);
 
         }
     }
