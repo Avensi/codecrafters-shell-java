@@ -16,10 +16,8 @@ public class Command {
     public void type(List<String> tokens){
         if (tokens.size() < 2) return;
         String argument = tokens.get(1);
-        String output = argument + ": not found";
         if (BUILTINS.contains(argument)){
-            output = argument + " is a shell builtin";
-            System.out.println(output);
+            System.out.println(argument + " is a shell builtin");
         }
         else {
             String pathEnv = System.getenv("PATH");
@@ -28,11 +26,10 @@ public class Command {
             for (String directory: directories){
                 Path filePath = Paths.get(directory, argument);
                 if (Files.exists(filePath) && Files.isExecutable(filePath)) {
-                    output = argument + " is " + filePath;
-                    System.out.println(output);
+                    System.out.println(argument + " is " + filePath);
                 }
                 else {
-                    System.err.println(output);
+                    System.err.println(argument + ": not found");
                 }
             }
         }

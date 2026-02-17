@@ -1,5 +1,6 @@
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +25,7 @@ public class Main {
 
             if (redirectIndex != -1){
                 fileName = tokens.get(redirectIndex + 1);
-                tokens = tokens.subList(0, redirectIndex);
+                tokens = new ArrayList<>(tokens.subList(0, redirectIndex));;
                 FileOutputStream outputFile = new FileOutputStream(fileName);
                 System.setOut(new PrintStream(outputFile));
             }
