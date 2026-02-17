@@ -27,11 +27,10 @@ public class Command {
                 Path filePath = Paths.get(directory, argument);
                 if (Files.exists(filePath) && Files.isExecutable(filePath)) {
                     System.out.println(argument + " is " + filePath);
-                }
-                else {
-                    System.err.println(argument + ": not found");
+                    break;
                 }
             }
+            System.err.println(argument + ": not found");
         }
 
     }
