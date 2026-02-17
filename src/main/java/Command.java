@@ -45,7 +45,7 @@ public class Command {
             pb.directory(currentDir.toFile());
             pb.inheritIO();
 
-            if (fileName.isEmpty()){
+            if (fileName != null){
                 pb.redirectOutput(new File(fileName));
             }
             Process process = pb.start();
