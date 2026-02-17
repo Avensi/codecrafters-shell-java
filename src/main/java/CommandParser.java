@@ -62,13 +62,13 @@ public class CommandParser {
         return result;
     }
 
-    public List<String> parseOperator(List<String> tokens){
-        for (String token: tokens){
-            if (REDIRECT_OPERATORS.contains(token)){
-               return List.of(token, tokens.getLast());
+    public int getRedirectIndex(List<String> tokens){
+        for (int i=0; i<tokens.size(); i++){
+            if (REDIRECT_OPERATORS.contains(tokens.get(i))){
+               return i;
             }
         }
-        return new ArrayList<>();
+        return -1;
     }
 
     private boolean isValidDoubleQuoteEscape(char nextChar) {

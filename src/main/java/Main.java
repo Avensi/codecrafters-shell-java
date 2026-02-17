@@ -19,12 +19,12 @@ public class Main {
                 continue;
             }
             List<String> tokens = commandParser.parseCommand(input);
-            List<String> operators = commandParser.parseOperator(tokens);
-            tokens.removeAll(operators);
             String commandName = tokens.getFirst();
+            int redirectIndex = commandParser.getRedirectIndex(tokens);
 
-            if (!operators.isEmpty()){
-                fileName = operators.getLast();
+            if (redirectIndex != -1){
+                fileName = tokens.get(redirectIndex + 1);
+                tokens = tokens.subList(0, redirectIndex);
                 FileOutputStream outputFile = new FileOutputStream(fileName);
                 System.setOut(new PrintStream(outputFile));
             }
