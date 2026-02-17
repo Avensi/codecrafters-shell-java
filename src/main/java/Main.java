@@ -9,11 +9,11 @@ public class Main {
         Command commandService = new Command();
         CommandParser commandParser = new CommandParser();
         PrintStream originalOut = System.out;
-        String fileName = null;
 
         while (true){
             System.out.print("$ ");
             String input = scanner.nextLine().trim();
+            String fileName = null;
 
             if (input.isEmpty()) {
                 continue;
