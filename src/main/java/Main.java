@@ -1,4 +1,3 @@
-import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.List;
@@ -10,7 +9,6 @@ public class Main {
         Command commandService = new Command();
         CommandParser commandParser = new CommandParser();
         PrintStream originalOut = System.out;
-        String fileName = null;
 
         while (true){
             System.out.print("$ ");
@@ -20,11 +18,12 @@ public class Main {
                 continue;
             }
             List<String> tokens = commandParser.parseCommand(input);
+            List<String> operators = commandParser.parseOperator(tokens);
+            tokens.remove(operators);
             String commandName = tokens.getFirst();
 
-            if (commandParser.hasOperator(tokens)){
-                fileName = tokens.getLast();
-                FileOutputStream outputFile = new FileOutputStream(fileName);
+            if (!operators.isEmpty()){
+                FileOutputStream outputFile = new FileOutputStream(operators.getLast());
                 System.setOut(new PrintStream(outputFile));
             }
 
@@ -34,7 +33,7 @@ public class Main {
                 case "type" -> commandService.type(tokens);
                 case "pwd" -> commandService.pwd();
                 case "cd" -> commandService.cd(tokens);
-                default -> commandService.execute(tokens, fileName);
+                default -> commandService.execute(tokens, operators.getLast());
             }
             System.setOut(originalOut);
 

@@ -62,13 +62,13 @@ public class CommandParser {
         return result;
     }
 
-    public boolean hasOperator(List<String> tokens){
+    public List<String> parseOperator(List<String> tokens){
         for (String token: tokens){
             if (REDIRECT_OPERATORS.contains(token)){
-               return true;
+               return List.of(token, tokens.getLast());
             }
         }
-        return false;
+        return new ArrayList<>();
     }
 
     private boolean isValidDoubleQuoteEscape(char nextChar) {
