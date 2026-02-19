@@ -8,13 +8,14 @@ public class CommandDispatcher {
 
     private final Command commandService;
     private final CommandParser commandParser;
+    private final PrintStream originalOut;
+    private final PrintStream originalErr;
 
-    PrintStream originalOut = System.out;
-    PrintStream originalErr = System.err;
-
-    public CommandDispatcher(Command commandService, CommandParser commandParser){
+    public CommandDispatcher(Command commandService, CommandParser commandParser, PrintStream originalOut, PrintStream originalErr){
         this.commandService = commandService;
         this.commandParser = commandParser;
+        this.originalOut = originalOut;
+        this.originalErr = originalErr;
     }
 
     public void dispatch(String input){
@@ -28,7 +29,7 @@ public class CommandDispatcher {
         if (redirectIndex != -1){
             fileName = tokens.get(redirectIndex + 1);
             redirectionOperator = tokens.get(redirectIndex);
-            tokens = new ArrayList<>(tokens.subList(0, redirectIndex));;
+            tokens = new ArrayList<>(tokens.subList(0, redirectIndex));
         }
 
         ProcessBuilder processBuilder = new ProcessBuilder(tokens);

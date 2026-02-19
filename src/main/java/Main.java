@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        CommandDispatcher commandDispatcher = new CommandDispatcher(new Command(), new CommandParser());
+        CommandDispatcher commandDispatcher = new CommandDispatcher(new Command(), new CommandParser(), System.out, System.err);
 
         while (true){
             System.out.print("$ ");
