@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,15 +34,9 @@ public class Command {
 
     }
 
-    public void execute(List<String> tokens, String fileName){
+    public void execute(List<String> tokens, ProcessBuilder pb){
         try {
-            ProcessBuilder pb = new ProcessBuilder(tokens);
             pb.directory(currentDir.toFile());
-            pb.inheritIO();
-
-            if (fileName != null){
-                pb.redirectOutput(new File(fileName));
-            }
             Process process = pb.start();
             process.waitFor();
         } catch (IOException e) {

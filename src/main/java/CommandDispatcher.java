@@ -1,6 +1,4 @@
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +12,27 @@ public class CommandDispatcher {
         this.commandParser = commandParser;
     }
 
-    public void dispatch(String input) {
+    public void dispatch(String input) throws FileNotFoundException {
         String fileName = null;
-        PrintStream originalOut = System.out;
+        String redirectionOperator = null;
 
         List<String> tokens = commandParser.parseCommand(input);
         String commandName = tokens.getFirst();
-
         int redirectIndex = commandParser.getRedirectIndex(tokens);
 
-        try {
-            if (redirectIndex != -1){
-                fileName = tokens.get(redirectIndex + 1);
-                tokens = new ArrayList<>(tokens.subList(0, redirectIndex));;
-                FileOutputStream outputFile = new FileOutputStream(fileName);
-                System.setOut(new PrintStream(outputFile));
+        if (redirectIndex != -1){
+            fileName = tokens.get(redirectIndex + 1);
+            redirectionOperator = tokens.get(redirectIndex);
+            tokens = new ArrayList<>(tokens.subList(0, redirectIndex));;
+        }
+
+        ProcessBuilder processBuilder = new ProcessBuilder(tokens);
+        processBuilder.inheritIO();
+
+        try (RedirectionHandler redirectionHandler = new RedirectionHandler(System.out, System.err)) {
+            if (redirectionOperator != null && fileName != null){
+                redirectionHandler.setup(redirectionOperator, fileName);
+                redirectionHandler.configureProcess(processBuilder, redirectionOperator, fileName);
             }
 
             switch (commandName) {
@@ -37,12 +41,8 @@ public class CommandDispatcher {
                 case "type" -> commandService.type(tokens);
                 case "pwd" -> commandService.pwd();
                 case "cd" -> commandService.cd(tokens);
-                default -> commandService.execute(tokens, fileName);
+                default -> commandService.execute(tokens, processBuilder);
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("No such file or directory");
-        } finally {
-            System.setOut(originalOut);
         }
 
     }
