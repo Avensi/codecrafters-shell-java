@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,15 @@ public class CommandDispatcher {
     private final Command commandService;
     private final CommandParser commandParser;
 
+    PrintStream originalOut = System.out;
+    PrintStream originalErr = System.err;
+
     public CommandDispatcher(Command commandService, CommandParser commandParser){
         this.commandService = commandService;
         this.commandParser = commandParser;
     }
 
-    public void dispatch(String input) throws FileNotFoundException {
+    public void dispatch(String input){
         String fileName = null;
         String redirectionOperator = null;
 
@@ -29,7 +34,7 @@ public class CommandDispatcher {
         ProcessBuilder processBuilder = new ProcessBuilder(tokens);
         processBuilder.inheritIO();
 
-        try (RedirectionHandler redirectionHandler = new RedirectionHandler(System.out, System.err)) {
+        try (RedirectionHandler redirectionHandler = new RedirectionHandler(originalOut,originalErr)) {
             if (redirectionOperator != null && fileName != null){
                 redirectionHandler.setup(redirectionOperator, fileName);
                 redirectionHandler.configureProcess(processBuilder, redirectionOperator, fileName);
@@ -43,6 +48,8 @@ public class CommandDispatcher {
                 case "cd" -> commandService.cd(tokens);
                 default -> commandService.execute(tokens, processBuilder);
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("No such file or directory");
         }
 
     }
