@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -37,8 +36,8 @@ public class CommandDispatcher {
 
         try (RedirectionHandler redirectionHandler = new RedirectionHandler(originalOut,originalErr)) {
             if (redirectionOperator != null && fileName != null){
-                redirectionHandler.setup(redirectionOperator, fileName);
-                redirectionHandler.configureProcess(processBuilder, redirectionOperator, fileName);
+                redirectionHandler.redirectJvmStreams(redirectionOperator, fileName);
+                redirectionHandler.redirectOsProcess(processBuilder, redirectionOperator, fileName);
             }
 
             switch (commandName) {

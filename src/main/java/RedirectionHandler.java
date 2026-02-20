@@ -12,7 +12,7 @@ public class RedirectionHandler implements AutoCloseable{
         this.originalErr = originalErr;
     }
 
-    public void setup(String redirectionOperator, String fileName) throws FileNotFoundException {
+    public void redirectJvmStreams(String redirectionOperator, String fileName) throws FileNotFoundException {
         if (fileName != null){
             FileOutputStream outputFile;
             FileOutputStream outputAppendFile;
@@ -37,7 +37,7 @@ public class RedirectionHandler implements AutoCloseable{
         }
     }
 
-    public void configureProcess(ProcessBuilder processBuilder, String redirectionOperator, String fileName) {
+    public void redirectOsProcess(ProcessBuilder processBuilder, String redirectionOperator, String fileName) {
         if (fileName != null){
             switch (redirectionOperator){
                 case ">", "1>" -> processBuilder.redirectOutput(new File(fileName));
