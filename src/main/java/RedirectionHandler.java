@@ -15,8 +15,10 @@ public class RedirectionHandler implements AutoCloseable{
     public void setup(String redirectionOperator, String fileName) throws FileNotFoundException {
         if (fileName != null){
             FileOutputStream outputFile = new FileOutputStream(fileName);
+            FileOutputStream outputAppendFile = new FileOutputStream(fileName, true);
             switch (redirectionOperator){
                 case ">", "1>" -> System.setOut(new PrintStream(outputFile));
+                case "1>>", ">>" -> System.setOut(new PrintStream(outputAppendFile));
                 case "2>" -> System.setErr(new PrintStream(outputFile));
             }
         }
@@ -26,6 +28,7 @@ public class RedirectionHandler implements AutoCloseable{
         if (fileName != null){
             switch (redirectionOperator){
                 case ">", "1>" -> processBuilder.redirectOutput(new File(fileName));
+                case "1>>", ">>" -> processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(fileName)));
                 case "2>" -> processBuilder.redirectError(new File(fileName));
             }
         }

@@ -9,7 +9,7 @@ public class CommandParser {
     private static final char ESCAPE = '\\';
     private static final char DOLLAR = '$';
     private static final char NEWLINE = '\n';
-    private static final List<String> REDIRECT_OPERATORS = List.of(">", "1>", "2>");
+    private static final List<String> REDIRECT_OPERATORS = List.of(">", "1>", "2>", "1>>", ">>");
 
     public List<String> parseCommand(String input){
         List<String> result = new ArrayList<>();
