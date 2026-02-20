@@ -14,12 +14,21 @@ public class RedirectionHandler implements AutoCloseable{
 
     public void setup(String redirectionOperator, String fileName) throws FileNotFoundException {
         if (fileName != null){
-            FileOutputStream outputFile = new FileOutputStream(fileName);
-            FileOutputStream outputAppendFile = new FileOutputStream(fileName, true);
+            FileOutputStream outputFile;
+            FileOutputStream outputAppendFile;
             switch (redirectionOperator){
-                case ">", "1>" -> System.setOut(new PrintStream(outputFile));
-                case "1>>", ">>" -> System.setOut(new PrintStream(outputAppendFile));
-                case "2>" -> System.setErr(new PrintStream(outputFile));
+                case ">", "1>":
+                    outputFile = new FileOutputStream(fileName);
+                    System.setOut(new PrintStream(outputFile));
+                    break;
+                case "1>>", ">>":
+                    outputAppendFile = new FileOutputStream(fileName, true);
+                    System.setOut(new PrintStream(outputAppendFile));
+                    break;
+                case "2>":
+                    outputFile = new FileOutputStream(fileName);
+                    System.setErr(new PrintStream(outputFile));
+                    break;
             }
         }
     }
