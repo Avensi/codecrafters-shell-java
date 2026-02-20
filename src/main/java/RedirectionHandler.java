@@ -29,6 +29,10 @@ public class RedirectionHandler implements AutoCloseable{
                     outputFile = new FileOutputStream(fileName);
                     System.setErr(new PrintStream(outputFile));
                     break;
+                case "2>>":
+                    outputAppendFile = new FileOutputStream(fileName, true);
+                    System.setErr(new PrintStream(outputAppendFile));
+                    break;
             }
         }
     }
@@ -39,6 +43,7 @@ public class RedirectionHandler implements AutoCloseable{
                 case ">", "1>" -> processBuilder.redirectOutput(new File(fileName));
                 case "1>>", ">>" -> processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(fileName)));
                 case "2>" -> processBuilder.redirectError(new File(fileName));
+                case "2>>" -> processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(fileName)));
             }
         }
     }
