@@ -28,10 +28,11 @@ public class ExecutableCompleter implements Completer {
             try (Stream<Path> paths = Files.list(directoryPath)){
                 paths.filter(Files::isExecutable)
                         .map(Path::getFileName)
-                        .forEach(filename -> candidates.add(new Candidate(AttributedString.stripAnsi(filename.getFileName().toString()), filename.toFile().getName(), null, null, null, null, true)));
-            } catch (IOException e) {
-                System.err.println("Could not read directory: " + e.getMessage());
-            }
+                        .forEach(filename -> {
+                            String name = filename.toString();
+                            candidates.add(new Candidate(AttributedString.stripAnsi(name), name, null, null, null, null, true));
+                        });
+            } catch (IOException _) {}
         }
     }
 }
