@@ -1,6 +1,8 @@
+import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
+import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -12,9 +14,12 @@ public class Main {
         DefaultParser parser = new DefaultParser();
         parser.setEscapeChars(null);
 
+        Completer stringsCompleter = new StringsCompleter("echo", "exit");
+
         LineReader lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
                 .parser(parser)
+                .completer(stringsCompleter)
                 .build();
 
         while (true){
