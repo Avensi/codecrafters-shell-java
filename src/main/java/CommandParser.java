@@ -38,7 +38,6 @@ public class CommandParser {
                     currentWord.append(nextChar);
                     i++;
                 }
-
             }
             else if (currentChar == SINGLE_QUOTE && !inDoubleQuote){
                 inSingleQuote = !inSingleQuote;
