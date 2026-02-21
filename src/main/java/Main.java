@@ -26,6 +26,8 @@ public class Main {
                 .completer(aggregateCompleter)
                 .option(LineReader.Option.AUTO_MENU, false)
                 .option(LineReader.Option.INSERT_TAB, true)
+                .option(LineReader.Option.AUTO_LIST, true)
+                .option(LineReader.Option.LIST_AMBIGUOUS, true)
                 .build();
 
         while (true){
