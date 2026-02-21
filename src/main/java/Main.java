@@ -4,7 +4,6 @@ import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
 import org.jline.reader.impl.completer.AggregateCompleter;
-import org.jline.reader.impl.completer.FileNameCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -22,7 +21,7 @@ public class Main {
 
         Completer aggregateCompleter = new AggregateCompleter(
                 new StringsCompleter("echo", "exit"),
-                new Completers.FilesCompleter(Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize()));
+                new ExecutableCompleter());
 
         LineReader lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
