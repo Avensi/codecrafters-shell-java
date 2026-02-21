@@ -21,6 +21,7 @@ public class Main {
                 .terminal(terminal)
                 .parser(parser)
                 .completer(stringsCompleter)
+                .option(LineReader.Option.COMPLETE_IN_WORD, true)
                 .build();
 
         while (true){
