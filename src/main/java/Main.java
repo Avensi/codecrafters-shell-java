@@ -21,12 +21,12 @@ public class Main {
                 .terminal(terminal)
                 .parser(parser)
                 .completer(stringsCompleter)
-                .option(LineReader.Option.COMPLETE_IN_WORD, true)
+                .option(LineReader.Option.AUTO_MENU, false)
+                .option(LineReader.Option.INSERT_TAB, true)
                 .build();
 
         while (true){
-            System.out.print("$ ");
-            String input = lineReader.readLine();
+            String input = lineReader.readLine("$ ");
             if (input.isEmpty()) {
                 continue;
             }
