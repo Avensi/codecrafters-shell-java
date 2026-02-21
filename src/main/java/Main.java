@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         CommandDispatcher commandDispatcher = new CommandDispatcher(new Command(), new CommandParser(), System.out, System.err);
 
-        Terminal terminal = TerminalBuilder.builder().build();
+        Terminal terminal = TerminalBuilder.builder().system(true).build();
 
         DefaultParser parser = new DefaultParser();
         parser.setEscapeChars(null);
