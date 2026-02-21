@@ -22,11 +22,13 @@ public class ExecutableCompleter implements Completer {
 
         String pathEnv = System.getenv("PATH");
         String[] directories = pathEnv.split(":");
+        String prefix = commandLine.word();
 
         for (String directory: directories){
             Path directoryPath = Paths.get(directory);
             try (Stream<Path> paths = Files.list(directoryPath)){
-                paths.filter(Files::isExecutable)
+                paths.filter(filePath -> filePath.getFileName().toString().startsWith(prefix))
+                        .filter(Files::isExecutable)
                         .map(Path::getFileName)
                         .forEach(filename -> {
                             String name = filename.toString();
