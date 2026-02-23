@@ -27,9 +27,13 @@ public class Main {
                 .terminal(terminal)
                 .parser(parser)
                 .completer(aggregateCompleter)
-                .option(LineReader.Option.AUTO_MENU, true)
-                .option(LineReader.Option.INSERT_TAB, true)
+                // Disable AUTO_MENU to prevent showing the list on the 1st press
+                .option(LineReader.Option.AUTO_MENU, false)
+                .option(LineReader.Option.INSERT_TAB, false)
                 .build();
+
+        lineReader.setVariable(LineReader.BELL_STYLE, "audible");
+        lineReader.setVariable(LineReader.AMBIGUOUS_BINDING, true);
 
         while (true){
             String input = lineReader.readLine("$ ");
