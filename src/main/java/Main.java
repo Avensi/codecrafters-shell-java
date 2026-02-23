@@ -1,3 +1,4 @@
+import jline.ExecutableCompleter;
 import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -6,6 +7,8 @@ import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+
+import javax.sound.sampled.Line;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -24,10 +27,8 @@ public class Main {
                 .terminal(terminal)
                 .parser(parser)
                 .completer(aggregateCompleter)
-                .option(LineReader.Option.AUTO_MENU, false)
-                .option(LineReader.Option.AUTO_LIST, true)
+                .option(LineReader.Option.AUTO_MENU, true)
                 .option(LineReader.Option.INSERT_TAB, true)
-                .option(LineReader.Option.LIST_AMBIGUOUS, true)
                 .build();
 
         while (true){

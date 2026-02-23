@@ -1,3 +1,5 @@
+package jline;
+
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
