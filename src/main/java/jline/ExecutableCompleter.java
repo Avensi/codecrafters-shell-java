@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 public class ExecutableCompleter implements Completer {
@@ -20,9 +22,17 @@ public class ExecutableCompleter implements Completer {
         assert commandLine != null;
         assert candidates != null;
 
+        String prefix = commandLine.word();
+        Set<String> matches = getMatches(prefix);
+        for (String name: matches){
+            candidates.add(new Candidate(AttributedString.stripAnsi(name), name, null, null, null, null, true));
+        }
+    }
+
+    public Set<String> getMatches(String prefix){
+        Set<String> matches = new TreeSet<>();
         String pathEnv = System.getenv("PATH");
         String[] directories = pathEnv.split(":");
-        String prefix = commandLine.word();
 
         for (String directory: directories){
             Path directoryPath = Paths.get(directory);
@@ -31,10 +41,10 @@ public class ExecutableCompleter implements Completer {
                         .filter(Files::isExecutable)
                         .map(Path::getFileName)
                         .forEach(filename -> {
-                            String name = filename.toString();
-                            candidates.add(new Candidate(AttributedString.stripAnsi(name), name, null, null, null, null, true));
+                            matches.add(filename.toString());
                         });
             } catch (IOException _) {}
         }
+        return matches;
     }
 }

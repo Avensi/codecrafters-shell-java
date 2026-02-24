@@ -27,16 +27,11 @@ public class Main {
                 .terminal(terminal)
                 .parser(parser)
                 .completer(aggregateCompleter)
-                // Disable AUTO_MENU to prevent inserting the first guess
                 .option(LineReader.Option.AUTO_MENU, false)
-                // Disable AUTO_LIST to prevent printing the list on the 1st press
-                .option(LineReader.Option.AUTO_LIST, true)
-                .option(LineReader.Option.INSERT_TAB, false)
+                .option(LineReader.Option.INSERT_TAB, true)
                 .build();
 
-// Ensure the bell rings on that first ambiguous press
         lineReader.setVariable(LineReader.BELL_STYLE, "audible");
-
 
         while (true){
             String input = lineReader.readLine("$ ");
