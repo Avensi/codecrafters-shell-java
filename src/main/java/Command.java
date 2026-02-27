@@ -5,8 +5,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Command {
-    private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd", "cd");
     private Path currentDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
+    private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd", "cd");
 
     public void echo(List<String> tokens) {
         System.out.println(String.join(" ", tokens.subList(1, tokens.size())));

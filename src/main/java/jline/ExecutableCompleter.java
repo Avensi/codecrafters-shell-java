@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -11,7 +12,6 @@ import java.util.stream.Stream;
 public class ExecutableCompleter{
 
     public ExecutableCompleter(){
-
     }
 
     public Set<String> getMatches(String prefix){
@@ -30,6 +30,8 @@ public class ExecutableCompleter{
                         });
             } catch (IOException _) {}
         }
+
+        matches.addAll(List.of("echo", "exit"));
         return matches;
     }
 }
