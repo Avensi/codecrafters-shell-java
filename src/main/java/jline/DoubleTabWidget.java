@@ -32,12 +32,12 @@ public class DoubleTabWidget extends Widgets {
         if (matches.isEmpty()){
             printBell();
             firstTabSeen = false;
-            lastPrefix = prefix;
+            lastPrefix = null;
         } else if (matches.size() == 1){
             reader.getBuffer().write(matches.getFirst().substring(prefix.length()) + " ");
             callWidget(LineReader.REDISPLAY);
             firstTabSeen = false;
-            lastPrefix = prefix;
+            lastPrefix = null;
         } else {
             if (prefix.equals(lastPrefix)) {
                 firstTabSeen = true;
