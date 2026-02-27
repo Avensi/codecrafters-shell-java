@@ -34,7 +34,7 @@ public class DoubleTabWidget extends Widgets {
             firstTabSeen = false;
             lastPrefix = prefix;
         } else if (matches.size() == 1){
-            reader.getBuffer().write(matches.getFirst().substring(prefix.length()));
+            reader.getBuffer().write(matches.getFirst().substring(prefix.length()) + " ");
             callWidget(LineReader.REDISPLAY);
             firstTabSeen = false;
             lastPrefix = prefix;
