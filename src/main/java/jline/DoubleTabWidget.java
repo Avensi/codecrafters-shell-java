@@ -7,27 +7,27 @@ import org.jline.widget.Widgets;
 import java.util.List;
 
 public class DoubleTabWidget extends Widgets {
-    private final ExecutableCompleter executableCompleter;
+    private final Completer completer;
 
     private boolean firstTabSeen = false;
     private String lastPrefix = null;
 
-    public static DoubleTabWidget create(LineReader reader, ExecutableCompleter executableCompleter) {
-        DoubleTabWidget widgets = new DoubleTabWidget(reader, executableCompleter);
+    public static DoubleTabWidget create(LineReader reader, Completer completer) {
+        DoubleTabWidget widgets = new DoubleTabWidget(reader, completer);
         widgets.addWidget("complete", widgets::complete);
         widgets.getKeyMap().bind(new Reference("complete"), "\t");
 
         return widgets;
     }
 
-    private DoubleTabWidget(LineReader reader, ExecutableCompleter executableCompleter) {
+    private DoubleTabWidget(LineReader reader, Completer completer) {
         super(reader);
-        this.executableCompleter = executableCompleter;
+        this.completer = completer;
     }
 
     public boolean complete() {
         String prefix = super.reader.getBuffer().toString();
-        List<String> matches = executableCompleter.getMatches(prefix).stream().toList();
+        List<String> matches = completer.getMatches(prefix).stream().toList();
 
         if (matches.isEmpty()){
             printBell();

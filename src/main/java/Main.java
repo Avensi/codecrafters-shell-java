@@ -1,5 +1,5 @@
 import jline.DoubleTabWidget;
-import jline.ExecutableCompleter;
+import jline.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
@@ -15,7 +15,7 @@ public class Main {
         DefaultParser parser = new DefaultParser();
         parser.setEscapeChars(null);
 
-        ExecutableCompleter executableCompleter = new ExecutableCompleter();
+        Completer completer = new Completer();
 
         LineReader lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
@@ -25,7 +25,7 @@ public class Main {
                 .option(LineReader.Option.INSERT_TAB, false)
                 .build();
 
-        DoubleTabWidget.create(lineReader, executableCompleter);
+        DoubleTabWidget.create(lineReader, completer);
 
         while (true){
             String input = lineReader.readLine("$ ");

@@ -9,15 +9,16 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-public class ExecutableCompleter{
+public class Completer {
 
-    public ExecutableCompleter(){
+    public Completer(){
     }
 
     public Set<String> getMatches(String prefix){
         Set<String> matches = new TreeSet<>();
         String pathEnv = System.getenv("PATH");
         String[] directories = pathEnv.split(":");
+        List<String> builtIns = List.of("echo", "exit");
 
         for (String directory: directories){
             Path directoryPath = Paths.get(directory);
@@ -31,7 +32,11 @@ public class ExecutableCompleter{
             } catch (IOException _) {}
         }
 
-        matches.addAll(List.of("echo", "exit"));
+        for (String builtIn: builtIns){
+            if(builtIn.startsWith(prefix)){
+                matches.add(builtIn);
+            }
+        }
         return matches;
     }
 }
