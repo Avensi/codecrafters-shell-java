@@ -1,14 +1,12 @@
+import jline.DoubleTabWidget;
 import jline.ExecutableCompleter;
 import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
-import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-
-import javax.sound.sampled.Line;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -19,20 +17,20 @@ public class Main {
         DefaultParser parser = new DefaultParser();
         parser.setEscapeChars(null);
 
-        Completer aggregateCompleter = new AggregateCompleter(
-                new StringsCompleter("echo", "exit"),
-                new ExecutableCompleter());
+        Completer builtInCompleter = new StringsCompleter("echo", "exit");
+        ExecutableCompleter executableCompleter = new ExecutableCompleter();
+
 
         LineReader lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
                 .parser(parser)
-                .completer(aggregateCompleter)
+                .completer(builtInCompleter)
                 .option(LineReader.Option.AUTO_MENU, false)
-                .option(LineReader.Option.INSERT_TAB, true)
+                .option(LineReader.Option.AUTO_LIST, true)
+                .option(LineReader.Option.INSERT_TAB, false)
                 .build();
 
-        lineReader.setVariable(LineReader.BELL_STYLE, "audible");
-
+        DoubleTabWidget.create(lineReader, executableCompleter);
         while (true){
             String input = lineReader.readLine("$ ");
             if (input.isEmpty()) {

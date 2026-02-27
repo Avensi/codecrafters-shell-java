@@ -1,32 +1,17 @@
 package jline;
 
-import org.jline.reader.Candidate;
-import org.jline.reader.Completer;
-import org.jline.reader.LineReader;
-import org.jline.reader.ParsedLine;
-import org.jline.utils.AttributedString;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-public class ExecutableCompleter implements Completer {
+public class ExecutableCompleter{
 
-    @Override
-    public void complete(LineReader reader, ParsedLine commandLine, List<Candidate> candidates) {
-        assert commandLine != null;
-        assert candidates != null;
+    public ExecutableCompleter(){
 
-        String prefix = commandLine.word();
-        Set<String> matches = getMatches(prefix);
-        for (String name: matches){
-            candidates.add(new Candidate(AttributedString.stripAnsi(name), name, null, null, null, null, true));
-        }
     }
 
     public Set<String> getMatches(String prefix){
