@@ -1,4 +1,4 @@
-import jline.DoubleTabWidget;
+import jline.CompletionWidget;
 import jline.Completer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -25,7 +25,7 @@ public class Main {
                 .option(LineReader.Option.INSERT_TAB, false)
                 .build();
 
-        DoubleTabWidget.create(lineReader, completer);
+        CompletionWidget.create(lineReader, completer);
 
         while (true){
             String input = lineReader.readLine("$ ");

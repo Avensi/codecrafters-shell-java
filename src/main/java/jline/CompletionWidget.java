@@ -6,21 +6,21 @@ import org.jline.widget.Widgets;
 
 import java.util.List;
 
-public class DoubleTabWidget extends Widgets {
+public class CompletionWidget extends Widgets {
     private final Completer completer;
 
     private boolean firstTabSeen = false;
     private String lastPrefix = null;
 
-    public static DoubleTabWidget create(LineReader reader, Completer completer) {
-        DoubleTabWidget widgets = new DoubleTabWidget(reader, completer);
+    public static CompletionWidget create(LineReader reader, Completer completer) {
+        CompletionWidget widgets = new CompletionWidget(reader, completer);
         widgets.addWidget("complete", widgets::complete);
         widgets.getKeyMap().bind(new Reference("complete"), "\t");
 
         return widgets;
     }
 
-    private DoubleTabWidget(LineReader reader, Completer completer) {
+    private CompletionWidget(LineReader reader, Completer completer) {
         super(reader);
         this.completer = completer;
     }
@@ -39,6 +39,8 @@ public class DoubleTabWidget extends Widgets {
             firstTabSeen = false;
             lastPrefix = null;
         } else {
+
+
             if (prefix.equals(lastPrefix)) {
                 firstTabSeen = true;
             } else {
@@ -53,14 +55,35 @@ public class DoubleTabWidget extends Widgets {
 
                 reader.callWidget(LineReader.REDRAW_LINE);
                 reader.callWidget(LineReader.REDISPLAY);
-
                 firstTabSeen = true;
+
             } else {
-                printBell();
+                String lcp = longestCommonPrefix(matches);
+
+                if(lcp.length() > prefix.length()){
+                    reader.getBuffer().write(lcp.substring(prefix.length()));
+                    callWidget(LineReader.REDISPLAY);
+                }
+
+                else if (lcp.length() == prefix.length()){
+                    printBell();
+                    firstTabSeen = true;
+                }
+
             }
+
         }
 
         return true;
+    }
+
+    private String longestCommonPrefix(List<String> matches){
+        for (int i=0; i<matches.getFirst().length(); i++){
+            if(matches.getFirst().charAt(i) != matches.getLast().charAt(i)){
+                return matches.getFirst().substring(0, i);
+            }
+        }
+        return matches.getFirst();
     }
 
     private void printBell() {
