@@ -98,7 +98,9 @@ public class CommandDispatcher {
             processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
         }
         if (isSegmentLast) {
-            redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+            if (segment.redirectOp() != null && segment.fileName() != null){
+                redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+            }
         } else {
             processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
             processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
