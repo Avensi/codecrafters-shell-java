@@ -72,8 +72,11 @@ public class CommandDispatcher {
 
                 ProcessBuilder processBuilder = new ProcessBuilder(segment.tokens());
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+                if (segment.redirectOp() != null && segment.fileName() != null && isSegmentLast){
+                    redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+                }
 
-                manageRedirection(segment, isSegmentFirst, processBuilder, isSegmentLast, redirectionHandler);
+                //manageRedirection(segment, isSegmentFirst, processBuilder, isSegmentLast, redirectionHandler);
 
                 processBuilder.directory(shellState.getCurrentDir().toFile());
                 processBuilders.add(processBuilder);
