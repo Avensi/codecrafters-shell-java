@@ -100,8 +100,10 @@ public class CommandDispatcher {
         if (isSegmentLast) {
             if (segment.redirectOp() != null && segment.fileName() != null){
                 redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+            } else {
+                processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
             }
-        } else {
+        }else {
             processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
             processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         }
