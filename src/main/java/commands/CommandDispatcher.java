@@ -60,7 +60,9 @@ public class CommandDispatcher {
         List<ProcessBuilder> processBuilders = new ArrayList<>();
 
         try (RedirectionHandler redirectionHandler = new RedirectionHandler(originalOut,originalErr)) {
+            System.err.println("segments: " + segments.size());
             for (PipelineSegment segment: segments){
+                System.err.println("segment tokens: " + segment.tokens());
                 String commandName = segment.tokens().getFirst();
                 boolean isSegmentLast = segment == segments.getLast();
                 boolean isSegmentFirst = segment == segments.getFirst();
