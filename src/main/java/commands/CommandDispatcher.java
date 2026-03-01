@@ -72,14 +72,19 @@ public class CommandDispatcher {
 
                 ProcessBuilder processBuilder = new ProcessBuilder(segment.tokens());
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
-                if (segment.redirectOp() != null && segment.fileName() != null && isSegmentLast){
-                    redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
-                }
+
                 if (isSegmentFirst) {
                     processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
                 }
                 if (isSegmentLast) {
-                    processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                    if (segment.redirectOp() != null && segment.fileName() != null){
+                        redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+                    } else {
+                        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                    }
+                } else {
+                    processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+                    processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
                 }
 
                 processBuilder.directory(shellState.getCurrentDir().toFile());
