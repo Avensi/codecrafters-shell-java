@@ -97,7 +97,7 @@ public class CommandParser {
         for (String token: tokens){
             if (token.equals(String.valueOf(PIPE))){
                 segments.add(buildSegment(currentTokens));
-                currentTokens.clear();
+                currentTokens = new ArrayList<>();
             } else {
                 currentTokens.add(token);
             }

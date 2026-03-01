@@ -60,9 +60,7 @@ public class CommandDispatcher {
         List<ProcessBuilder> processBuilders = new ArrayList<>();
 
         try (RedirectionHandler redirectionHandler = new RedirectionHandler(originalOut,originalErr)) {
-            System.err.println("segments: " + segments.size());
             for (PipelineSegment segment: segments){
-                System.err.println("segment tokens: " + segment.tokens());
                 String commandName = segment.tokens().getFirst();
                 boolean isSegmentLast = segment == segments.getLast();
                 boolean isSegmentFirst = segment == segments.getFirst();
@@ -75,19 +73,7 @@ public class CommandDispatcher {
                 ProcessBuilder processBuilder = new ProcessBuilder(segment.tokens());
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
 
-                if (isSegmentFirst) {
-                    processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
-                }
-                if (isSegmentLast) {
-                    if (segment.redirectOp() != null && segment.fileName() != null){
-                        redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
-                    } else {
-                        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-                    }
-                } else {
-                    processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
-                    processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
-                }
+                manageRedirection(segment, isSegmentFirst, processBuilder, isSegmentLast, redirectionHandler);
 
                 processBuilder.directory(shellState.getCurrentDir().toFile());
                 processBuilders.add(processBuilder);
@@ -104,6 +90,22 @@ public class CommandDispatcher {
             Thread.currentThread().interrupt();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void manageRedirection(PipelineSegment segment, boolean isSegmentFirst, ProcessBuilder processBuilder, boolean isSegmentLast, RedirectionHandler redirectionHandler) {
+        if (isSegmentFirst) {
+            processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
+        }
+        if (isSegmentLast) {
+            if (segment.redirectOp() != null && segment.fileName() != null){
+                redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+            } else {
+                processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            }
+        } else {
+            processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+            processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         }
     }
 
