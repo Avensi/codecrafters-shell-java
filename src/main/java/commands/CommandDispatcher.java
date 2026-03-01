@@ -62,17 +62,26 @@ public class CommandDispatcher {
         try (RedirectionHandler redirectionHandler = new RedirectionHandler(originalOut,originalErr)) {
             for (PipelineSegment segment: segments){
                 String commandName = segment.tokens().getFirst();
+                boolean isSegmentLast = segment == segments.getLast();
+                boolean isSegmentFirst = segment == segments.getFirst();
+
                 if (!executableExists(commandName)) {
                     System.err.println(commandName + ": command not found");
                     return;
                 }
 
                 ProcessBuilder processBuilder = new ProcessBuilder(segment.tokens());
-                boolean isSegmentLast = segment == segments.getLast();
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
                 if (segment.redirectOp() != null && segment.fileName() != null && isSegmentLast){
                     redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
                 }
+                if (isSegmentFirst) {
+                    processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
+                }
+                if (isSegmentLast) {
+                    processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                }
+
                 processBuilder.directory(shellState.getCurrentDir().toFile());
                 processBuilders.add(processBuilder);
             }
