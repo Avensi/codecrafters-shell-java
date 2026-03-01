@@ -62,8 +62,6 @@ public class CommandDispatcher {
         try (RedirectionHandler redirectionHandler = new RedirectionHandler(originalOut,originalErr)) {
             for (PipelineSegment segment: segments){
                 String commandName = segment.tokens().getFirst();
-                boolean isSegmentLast = segment == segments.getLast();
-                boolean isSegmentFirst = segment == segments.getFirst();
 
                 if (!executableExists(commandName)) {
                     System.err.println(commandName + ": command not found");
@@ -72,11 +70,10 @@ public class CommandDispatcher {
 
                 ProcessBuilder processBuilder = new ProcessBuilder(segment.tokens());
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
-                if (segment.redirectOp() != null && segment.fileName() != null && isSegmentLast){
-                    redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
-                }
 
-                //manageRedirection(segment, isSegmentFirst, processBuilder, isSegmentLast, redirectionHandler);
+                boolean isSegmentLast = segment == segments.getLast();
+                boolean isSegmentFirst = segment == segments.getFirst();
+                manageRedirection(segment, isSegmentFirst, processBuilder, isSegmentLast, redirectionHandler);
 
                 processBuilder.directory(shellState.getCurrentDir().toFile());
                 processBuilders.add(processBuilder);
@@ -101,11 +98,7 @@ public class CommandDispatcher {
             processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
         }
         if (isSegmentLast) {
-            if (segment.redirectOp() != null && segment.fileName() != null){
-                redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
-            } else {
-                processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-            }
+            redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
         } else {
             processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
             processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);

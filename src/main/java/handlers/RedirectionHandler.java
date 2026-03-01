@@ -41,11 +41,23 @@ public class RedirectionHandler implements AutoCloseable{
 
     public void redirectOsProcess(ProcessBuilder processBuilder, String redirectionOperator, String fileName) {
         if (fileName != null){
-            switch (redirectionOperator){
-                case ">", "1>" -> processBuilder.redirectOutput(new File(fileName));
-                case "1>>", ">>" -> processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(fileName)));
-                case "2>" -> processBuilder.redirectError(new File(fileName));
-                case "2>>" -> processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(fileName)));
+            switch (redirectionOperator) {
+                case ">", "1>" -> {
+                    processBuilder.redirectOutput(new File(fileName));
+                    processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+                }
+                case "1>>", ">>" -> {
+                    processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(fileName)));
+                    processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+                }
+                case "2>" -> {
+                    processBuilder.redirectError(new File(fileName));
+                    processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                }
+                case "2>>" -> {
+                    processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(fileName)));
+                    processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                }
             }
         }
     }
