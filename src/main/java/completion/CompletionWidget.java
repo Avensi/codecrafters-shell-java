@@ -1,4 +1,4 @@
-package jline;
+package completion;
 
 import org.jline.reader.LineReader;
 import org.jline.reader.Reference;
@@ -39,8 +39,6 @@ public class CompletionWidget extends Widgets {
             firstTabSeen = false;
             lastPrefix = null;
         } else {
-
-
             if (prefix.equals(lastPrefix)) {
                 firstTabSeen = true;
             } else {
@@ -69,7 +67,6 @@ public class CompletionWidget extends Widgets {
                     printBell();
                     firstTabSeen = true;
                 }
-
             }
 
         }

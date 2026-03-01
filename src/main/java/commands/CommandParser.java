@@ -1,3 +1,7 @@
+package commands;
+
+import models.PipelineSegment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,7 @@ public class CommandParser {
     private static final char ESCAPE = '\\';
     private static final char DOLLAR = '$';
     private static final char NEWLINE = '\n';
+    private static final char PIPE = '|';
     private static final List<String> REDIRECT_OPERATORS = List.of(">", "1>", "2>", "1>>", ">>", "2>>");
 
     public List<String> parseCommand(String input){
@@ -61,7 +66,11 @@ public class CommandParser {
         return result;
     }
 
-    public int getRedirectIndex(List<String> tokens){
+    private boolean isValidDoubleQuoteEscape(char nextChar) {
+        return nextChar == DOUBLE_QUOTE || nextChar == ESCAPE || nextChar == DOLLAR || nextChar == NEWLINE || nextChar == PIPE;
+    }
+
+    private int getRedirectIndex(List<String> tokens){
         for (int i=0; i<tokens.size(); i++){
             if (REDIRECT_OPERATORS.contains(tokens.get(i))){
                return i;
@@ -70,7 +79,30 @@ public class CommandParser {
         return -1;
     }
 
-    private boolean isValidDoubleQuoteEscape(char nextChar) {
-        return nextChar == DOUBLE_QUOTE || nextChar == ESCAPE || nextChar == DOLLAR || nextChar == NEWLINE;
+    private PipelineSegment buildSegment(List<String> tokens) {
+        int redirectIndex = getRedirectIndex(tokens);
+        if (redirectIndex != -1) {
+            String op = tokens.get(redirectIndex);
+            String file = tokens.get(redirectIndex + 1);
+            List<String> cleanTokens = new ArrayList<>(tokens.subList(0, redirectIndex));
+            return new PipelineSegment(cleanTokens, op, file);
+        }
+        return new PipelineSegment(tokens, null, null);
+    }
+
+    public List<PipelineSegment> parseSegments(List<String> tokens){
+        List<PipelineSegment> segments = new ArrayList<>();
+
+        List<String> currentTokens = new ArrayList<>();
+        for (String token: tokens){
+            if (token.equals(String.valueOf(PIPE))){
+                segments.add(buildSegment(currentTokens));
+                currentTokens.clear();
+            } else {
+                currentTokens.add(token);
+            }
+        }
+        segments.add(buildSegment(currentTokens));
+        return segments;
     }
 }

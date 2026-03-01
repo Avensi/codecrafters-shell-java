@@ -1,4 +1,4 @@
-package jline;
+package completion;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,12 +1,19 @@
-import java.io.IOException;
+package commands;
+
+import models.ShellState;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class Command {
-    private Path currentDir = Paths.get(System.getProperty("user.dir")).toAbsolutePath().normalize();
     private static final List<String> BUILTINS = List.of("echo", "exit", "type", "pwd", "cd");
+    private final ShellState shellState;
+
+    public Command(ShellState shellState){
+        this.shellState = shellState;
+    }
 
     public void echo(List<String> tokens) {
         System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
@@ -31,23 +38,10 @@ public class Command {
             }
             System.err.println(argument + ": not found");
         }
-
-    }
-
-    public void execute(List<String> tokens, ProcessBuilder pb){
-        try {
-            pb.directory(currentDir.toFile());
-            Process process = pb.start();
-            process.waitFor();
-        } catch (IOException e) {
-            System.err.println(tokens.getFirst() + ": command not found");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     public void pwd(){
-        System.out.println(this.currentDir);
+        System.out.println(shellState.getCurrentDir());
     }
 
     public void cd(List<String> tokens){
@@ -59,10 +53,10 @@ public class Command {
             targetDir = targetDir.replaceFirst("^~", System.getenv("HOME"));
         }
 
-        Path targetPath = currentDir.resolve(Paths.get(targetDir));
+        Path targetPath = shellState.getCurrentDir().resolve(Paths.get(targetDir));
 
         if (Files.exists(targetPath) && Files.isDirectory(targetPath)){
-            currentDir = targetPath.normalize();
+            shellState.setCurrentDir(targetPath.normalize());
         } else {
             System.err.println("cd: " + targetDir + ": No such file or directory");
         }

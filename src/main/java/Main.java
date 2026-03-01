@@ -1,5 +1,9 @@
-import jline.CompletionWidget;
-import jline.Completer;
+import commands.Command;
+import commands.CommandDispatcher;
+import commands.CommandParser;
+import completion.CompletionWidget;
+import completion.Completer;
+import models.ShellState;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.impl.DefaultParser;
@@ -8,7 +12,8 @@ import org.jline.terminal.TerminalBuilder;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        CommandDispatcher commandDispatcher = new CommandDispatcher(new Command(), new CommandParser(), System.out, System.err);
+        ShellState shellState = new ShellState();
+        CommandDispatcher commandDispatcher = new CommandDispatcher(new Command(shellState), new CommandParser(), System.out, System.err, shellState);
 
         Terminal terminal = TerminalBuilder.builder().system(true).build();
 
