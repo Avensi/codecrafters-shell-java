@@ -69,7 +69,7 @@ public class CommandDispatcher {
 
                 ProcessBuilder processBuilder = new ProcessBuilder(segment.tokens());
                 boolean isSegmentLast = segment == segments.getLast();
-                processBuilder.inheritIO();
+                processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
                 if (segment.redirectOp() != null && segment.fileName() != null && isSegmentLast){
                     redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
                 }
