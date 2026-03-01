@@ -73,7 +73,7 @@ public class CommandDispatcher {
 
                 boolean isSegmentLast = segment == segments.getLast();
                 boolean isSegmentFirst = segment == segments.getFirst();
-                manageRedirection(segment, isSegmentFirst, processBuilder, isSegmentLast, redirectionHandler);
+                redirectionHandler.configureProcessStreams(segment, isSegmentFirst, processBuilder, isSegmentLast);
 
                 processBuilder.directory(shellState.getCurrentDir().toFile());
                 processBuilders.add(processBuilder);
@@ -93,21 +93,7 @@ public class CommandDispatcher {
         }
     }
 
-    private void manageRedirection(PipelineSegment segment, boolean isSegmentFirst, ProcessBuilder processBuilder, boolean isSegmentLast, RedirectionHandler redirectionHandler) {
-        if (isSegmentFirst) {
-            processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
-        }
-        if (isSegmentLast) {
-            if (segment.redirectOp() != null && segment.fileName() != null){
-                redirectionHandler.redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
-            } else {
-                processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-            }
-        }else {
-            processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
-            processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
-        }
-    }
+
 
     private boolean executableExists(String commandName) {
         String pathEnv = System.getenv("PATH");

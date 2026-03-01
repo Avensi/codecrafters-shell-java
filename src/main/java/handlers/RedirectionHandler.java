@@ -1,5 +1,7 @@
 package handlers;
 
+import models.PipelineSegment;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -59,6 +61,22 @@ public class RedirectionHandler implements AutoCloseable{
                     processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
                 }
             }
+        }
+    }
+
+    public void configureProcessStreams(PipelineSegment segment, boolean isSegmentFirst, ProcessBuilder processBuilder, boolean isSegmentLast) {
+        if (isSegmentFirst) {
+            processBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
+        }
+        if (isSegmentLast) {
+            if (segment.redirectOp() != null && segment.fileName() != null){
+                redirectOsProcess(processBuilder, segment.redirectOp(), segment.fileName());
+            } else {
+                processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            }
+        }else {
+            processBuilder.redirectInput(ProcessBuilder.Redirect.PIPE);
+            processBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         }
     }
 
